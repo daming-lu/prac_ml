@@ -43,6 +43,8 @@ train_op = tf.train.GradientDescentOptimizer(0.02).minimize(cost)  # construct a
 # load MNIST data
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 trX, trY, teX, teY = mnist.train.images, mnist.train.labels, mnist.test.images, mnist.test.labels
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+
 
 # Launch the graph in a session
 with tf.Session() as sess:
@@ -57,4 +59,3 @@ with tf.Session() as sess:
 
         mask_np = np.random.binomial(1, 1 - corruption_level, teX.shape)
         print(i, sess.run(cost, feed_dict={X: teX, mask: mask_np}))
-
