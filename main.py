@@ -1,10 +1,11 @@
 import tensorflow as tf
 import numpy as np
 import input_data
+from keras.datasets import mnist
 
 mnist_width = 28
 n_visible = mnist_width * mnist_width
-n_hidden = 500
+n_hidden = 2000
 corruption_level = 0.3
 
 # create node for input data
@@ -41,9 +42,22 @@ cost = tf.reduce_sum(tf.pow(X - Z, 2))  # minimize squared error
 train_op = tf.train.GradientDescentOptimizer(0.02).minimize(cost)  # construct an optimizer
 
 # load MNIST data
-mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
-trX, trY, teX, teY = mnist.train.images, mnist.train.labels, mnist.test.images, mnist.test.labels
+# mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+# trX, trY, teX, teY = mnist.train.images, mnist.train.labels, mnist.test.images, mnist.test.labels
+# (x_train, y_train), (x_test, y_test) = mnist.load_data()
+# (trX, trY), (teX, teY) = mnist.load_data()
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
+# import pdb;pdb.set_trace()
+x_train = x_train.astype('float32') / 255.
+x_test = x_test.astype('float32') / 255.
+x_train = x_train.reshape((len(x_train), np.prod(x_train.shape[1:])))
+x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
+
+trX = x_train
+trY = x_test
+
+teX = x_test
+teY = x_test
 
 
 # Launch the graph in a session
