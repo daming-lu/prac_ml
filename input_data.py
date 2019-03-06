@@ -5,6 +5,8 @@ import gzip
 import os
 from six.moves.urllib.request import urlretrieve
 import numpy
+from tensorflow.python.platform import gfile
+
 SOURCE_URL = 'http://yann.lecun.com/exdb/mnist/'
 
 
@@ -29,6 +31,7 @@ def extract_images(filename):
     """Extract the images into a 4D uint8 numpy array [index, y, x, depth]."""
     print('Extracting', filename)
     with gzip.open(filename) as bytestream:
+    # with gfile.Open(filename, 'rb') as f, gzip.GzipFile(fileobj=f) as bytestream:
         magic = _read32(bytestream)
         if magic != 2051:
             raise ValueError(
@@ -147,6 +150,7 @@ def read_data_sets(train_dir, fake_data=False, one_hot=False):
     TEST_IMAGES = 't10k-images-idx3-ubyte.gz'
     TEST_LABELS = 't10k-labels-idx1-ubyte.gz'
     VALIDATION_SIZE = 5000
+    import pdb;pdb.set_trace()
     local_file = maybe_download(TRAIN_IMAGES, train_dir)
     train_images = extract_images(local_file)
     local_file = maybe_download(TRAIN_LABELS, train_dir)
